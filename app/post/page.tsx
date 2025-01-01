@@ -7,8 +7,8 @@ import { useRef, useState, ChangeEvent } from "react";
 import { PostData } from "@/utils/types";
 import axios from "axios";
 import { useToast } from "@/hooks/use-toast";
-import { signIn, signOut, useSession } from "next-auth/react";
-import prisma from "@/lib/db";
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 export default function PostConfesion() {
   const titleRef = useRef<HTMLInputElement>(null);
@@ -22,6 +22,7 @@ export default function PostConfesion() {
   const handleClick = async ()=>{   
     if(titleRef.current?.value==""||contentRef.current?.value == ""){
       toast({
+        variant:"destructive",
         title: "Incomplete detials !",
         description: "Please fill all the required fields",
       })
@@ -34,16 +35,34 @@ export default function PostConfesion() {
       isAnonymous: isAnonymous
     }
 
-    console.log(data);
     const resposne = await axios.post("/api/post",data);
-    console.log(resposne)
 
+    if(resposne.status==200){
+      toast({
+        title:"Success",
+        description:"Posted Successfull"
+      })
+      setTimeout(()=>{redirect("/")},2000)
+    }else{
+      toast({
+        variant:"destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
+      })
+    }
+    
   }
 
   const handleSwitchChange = () => {
     setIsAnonymous(!isAnonymous);
   };
-
+  if(!(session.status=="authenticated")){
+    return(
+      <div className="flex w-full h-screen justify-center items-center">
+        Unauthorized pls signin to post
+      </div>
+    )
+  }
   return (
     <div className="flex flex-col items-center justify-center gap-5 m-5">
         <h2 className="text-4xl font-bold">Confess Your Heart out</h2>

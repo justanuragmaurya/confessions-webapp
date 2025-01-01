@@ -43,6 +43,6 @@ export async function POST(req: NextRequest) {
   }
   return NextResponse.json(
     { message: "POST CREATED SUCCESFULLY" },
-    { status: 201 }
+    { status: 200 }
   );
 }
