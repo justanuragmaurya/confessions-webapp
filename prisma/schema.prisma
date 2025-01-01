@@ -27,7 +27,7 @@ model Post {
   content   String
   upvotes   Int
   date      DateTime @default(now())
-  stayAnonymous Boolean
+  isAnonymous Boolean
   image     String?
   author    User    @relation(fields: [authorId], references: [id])
   authorId  Int
