@@ -1,14 +1,11 @@
 import prisma from './db';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from "next-auth/providers/google";
+import { NextAuthOptions } from "next-auth";
 import bcrypt from 'bcrypt'
 
 export const authOptions = {
     providers: [
-       GoogleProvider({
-         clientId: process.env.GOOGLE_CLIENT_ID!,
-         clientSecret: process.env.GOOGLE_CLIENT_SECRET!
-       }),
         CredentialsProvider({
          name: 'Credentials',
           credentials: {
@@ -65,4 +62,4 @@ export const authOptions = {
           return session
       }
     },
-  }
+  }satisfies NextAuthOptions

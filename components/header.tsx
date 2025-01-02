@@ -12,9 +12,9 @@ export default function Header() {
         <div className="flex gap-2 px-4">
                 <Link href={"/"}><h1>Home</h1></Link>
                 |
-                <h1>Confessions</h1>
+                <Link href={"/confessions"}><h1>Confessions</h1></Link>
                 |
-                <h1>My Confessions</h1>
+                <Link href={"/my-confessions"}><h1>My Confessions</h1></Link>
                 |
                 <Link href={"/post"}><h1>Post Confessions</h1></Link>
         </div>
