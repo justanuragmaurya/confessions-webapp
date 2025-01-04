@@ -12,36 +12,65 @@ export default async function MyConfessions() {
   }
 
   const user = await prisma.user.findFirst({
-    where:{
-        email: session.user?.email!
+    where: {
+      email: session.user?.email!
     }
-  })
+  });
+
   const data = await prisma.post.findMany({
     where: {
       authorId: user?.id,
     },
+    include: {
+      author: true,
+    },
+    orderBy: {
+      date: 'desc'
+    }
   });
 
   return (
-    <div className="p-5 grid grid-cols-3 gap-5">
-      {data.map((e) => {
-        return (
-          <>
-            <div className="flex flex-col p-5 bg-slate-200 rounded-md justify-between h-full min-h-96">
-              <div>
-                <h2 className="text-2xl font-bold">{e.title}</h2>
-                {e.isAnonymous?"":<div className="flex text-sm">by ~<h2>{user?.name}</h2></div>}
-                <br />  
-                <h2 className="">{e.content}</h2>
-                <div>
-                  {e.image?(<img className="max-h-48" src={`${e.image}`}/>):("")}
+    <div className="max-w-7xl mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold mb-8">My Confessions</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {data.map((post) => (
+          <div key={post.id} className="bg-white shadow-lg rounded-lg overflow-hidden border border-gray-200">
+            <div className="p-6">
+              <div className="flex justify-between items-start mb-4">
+                <h2 className="text-xl font-bold text-gray-900">{post.title}</h2>
+                <div className="flex items-center gap-2">
+                  <span className="text-gray-500">👍 {post.upvotes}</span>
                 </div>
               </div>
-              <h2>{e.date.toDateString()}</h2>
+              
+              <p className="text-gray-600 mb-4">{post.content}</p>
+              
+              <div className="flex items-center justify-between text-sm text-gray-500">
+                <div className="flex items-center gap-2">
+                  <span>{post.date.toLocaleDateString()}</span>
+                  {post.isAnonymous ? (
+                    <span className="bg-gray-100 px-2 py-1 rounded">Anonymous</span>
+                  ) : (
+                    <span className="bg-blue-100 px-2 py-1 rounded">{post.author.name || 'Unnamed User'}</span>
+                  )}
+                </div>
+              </div>
+              
+              {post.image && (
+                <div className="mt-4">
+                  <a href={post.image}>
+                  <img 
+                    src={post.image} 
+                    alt="Post image" 
+                    className="w-full h-32 object-contain rounded"
+                  />
+                  </a>
+                </div>
+              )}
             </div>
-          </>
-        );
-      })}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
