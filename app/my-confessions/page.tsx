@@ -1,4 +1,5 @@
 import prisma from "@/lib/db";
+import DeleteButton from "@/components/deleteButton"
 import { getServerSession } from "next-auth";
 
 export default async function MyConfessions() {
@@ -54,6 +55,7 @@ export default async function MyConfessions() {
                     <span className="bg-blue-100 px-2 py-1 rounded">{post.author.name || 'Unnamed User'}</span>
                   )}
                 </div>
+                <DeleteButton id={post.id}/>
               </div>
               
               {post.image && (
