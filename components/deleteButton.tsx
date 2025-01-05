@@ -1,7 +1,7 @@
 "use client"
 
 import axios from "axios"
-import { DeleteIcon, Trash, Trash2Icon, TrashIcon } from "lucide-react"
+import { Trash2Icon } from "lucide-react"
 import { useRouter } from "next/navigation"
 
 export default function DeleteButton({id}:{id:number}){
